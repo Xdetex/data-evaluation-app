@@ -60,33 +60,37 @@ const Welcome: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-white p-20">
+    <div className="min-h-screen bg-white p-4 sm:p-6 md:p-10 lg:p-20">
       <img
         src={XdetexLogo}
         alt="XDetex Logo"
-        className="w-1/8 max-w-full mx-auto mb-15"
+        className="w-1/4 sm:w-1/6 md:w-1/8 max-w-full mx-auto mb-4 sm:mb-6 md:mb-15"
       />
-      <div className="flex flex-row justify-between">
-        <div>
-          <h1 className="text-5xl font-semibold mb-4 text-primary-blue">
+      <div className="flex flex-col md:flex-row justify-between items-center md:items-start">
+        <div className="text-center md:text-left">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-semibold mb-2 text-primary-blue">
             Welcome Back
           </h1>
-          <p className="text-gray-600 mb-10 text-sm">
+          <p className="text-gray-600 mb-4 sm:mb-6 md:mb-10 text-sm">
             Yet bed any for travelling assistance indulgence unpleasing.
             <br />
             Not thoughts all exercise blessing.
           </p>
         </div>
-        <div className="flex flex-col items-center justify-center gap-3">
-          <span className="font-Poppins">Guide</span>
-          <div className="flex mb-10 space-x-4">
+        <div className="flex flex-col items-center justify-center gap-2 sm:gap-3 mt-4 md:mt-0">
+          <span className="font-Poppins text-sm sm:text-base">Guide</span>
+          <div className="flex mb-5 sm:mb-4 md:mb-10 space-x-2 sm:space-x-4">
             <button
               onClick={handleVideoClick}
-              className="bg-gray-200 text-gray-700 rounded-full p-4 flex items-center justify-center hover:bg-gray-300 transition"
+              className="bg-gray-200 text-gray-700 rounded-full p-2 sm:p-3 md:p-4 flex items-center justify-center hover:bg-gray-300 transition"
             >
               <svg
-                width="32"
-                height="32"
+                width="24"
+                height="24"
+                sm:w-28
+                sm:h-28
+                md:w-32
+                md:h-32
                 viewBox="0 0 32 32"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
@@ -105,11 +109,15 @@ const Welcome: React.FC = () => {
             </button>
             <button
               onClick={handlePdfClick}
-              className="bg-gray-200 text-gray-700 rounded-full p-4 flex items-center justify-center hover:bg-gray-300 transition"
+              className="bg-gray-200 text-gray-700 rounded-full p-2 sm:p-3 md:p-4 flex items-center justify-center hover:bg-gray-300 transition"
             >
               <svg
-                width="30"
-                height="30"
+                width="20"
+                height="20"
+                sm:w-24
+                sm:h-24
+                md:w-30
+                md:h-30
                 viewBox="0 0 30 30"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
@@ -123,14 +131,19 @@ const Welcome: React.FC = () => {
           </div>
         </div>
       </div>
-      <h2 className="text-xl font-medium mb-6 text-gray-600">Steps</h2>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+      <h2 className="text-lg sm:text-xl font-medium mb-4 sm:mb-6 text-gray-600 text-center md:text-left">
+        Steps
+      </h2>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-6 sm:mb-10">
         {[...Array(3)].map((_, index) => (
-          <div key={index} className="bg-white p-6 rounded-lg shadow-md">
-            <div className="bg-gray-100 text-gray-600 font-semibold rounded-full w-8 h-8 flex items-center justify-center mb-4">
+          <div
+            key={index}
+            className="bg-white p-4 sm:p-6 rounded-lg shadow-md text-left border-1 border-gray-50"
+          >
+            <div className="bg-gray-100 text-gray-600 font-semibold rounded-full w-8 h-8 flex items-center justify-center mx-auto sm:mx-0 mb-2 sm:mb-4">
               0{index + 1}
             </div>
-            <h3 className="text-2xl font-semibold mb-10 p-5">
+            <h3 className="text-lg sm:text-2xl font-semibold mb-4 sm:mb-6 p-2 sm:p-5">
               Go to "Download your information"
             </h3>
             <ul className="text-gray-600 text-sm list-disc pl-5">
@@ -141,7 +154,7 @@ const Welcome: React.FC = () => {
           </div>
         ))}
       </div>
-      <h2 className="text-xl font-medium mb-6 text-gray-600">
+      <h2 className="text-lg sm:text-xl font-medium mb-4 sm:mb-6 text-gray-600 text-center md:text-left">
         Upload your file here
       </h2>
       <div
@@ -152,40 +165,46 @@ const Welcome: React.FC = () => {
           !submissionStatus &&
           document.getElementById("file-upload")?.click()
         }
-        className="border-2 border-dashed border-gray-300 rounded-2xl p-10 flex flex-col items-center justify-center cursor-pointer hover:border-blue-500 transition"
+        className="border-2 border-dashed border-gray-300 rounded-xl sm:rounded-2xl p-10 sm:p-15 md:p-20 flex flex-col items-center justify-center cursor-pointer hover:border-primary-blue transition"
       >
         {selectedFile ? (
-          <div className="flex flex-col items-center space-x-4">
-            <FaFile className="text-2xl text-primary-blue" />
-            <span className="text-primary-blue py-4 font-medium">
+          <div className="flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-4">
+            <FaFile className="text-xl sm:text-2xl md:text-2xl text-primary-blue" />
+            <span className="text-primary-blue py-2 sm:py-4 font-medium text-center sm:text-left">
               {selectedFile.name}
             </span>
             <button
               onClick={handleSubmit}
-              className="py-2 px-4 bg-primary-blue text-white rounded-full font-medium hover:bg-white hover:text-primary-blue hover:border-2 transition"
+              className="py-1 sm:py-2 px-3 sm:px-4 bg-primary-blue text-white rounded-full font-medium hover:bg-white hover:text-primary-blue hover:border-2 transition w-full sm:w-auto"
             >
               Submit
             </button>
           </div>
         ) : submissionStatus ? (
           <>
-            <FaCloudUploadAlt className="text-5xl text-primary-blue mb-2" />
-            <p className="text-primary-blue font-medium mb-1">
+            <FaCloudUploadAlt className="text-3xl sm:text-4xl md:text-5xl text-primary-blue mb-2" />
+            <p className="text-primary-blue font-medium mb-1 text-center">
               Drag & drop files or Browse
             </p>
-            <p className="text-gray-500 text-sm">Supported formats: ZIP</p>
+            <p className="text-gray-500 text-xs sm:text-sm">
+              Supported formats: ZIP
+            </p>
           </>
         ) : (
           <>
-            <FaCloudUploadAlt className="text-5xl text-primary-blue mb-2" />
-            <p className="text-primary-blue font-medium mb-1">
+            <FaCloudUploadAlt className="text-3xl sm:text-4xl md:text-5xl text-primary-blue mb-2" />
+            <p className="text-primary-blue font-medium mb-1 text-center">
               Drag & drop files or Browse
             </p>
-            <p className="text-gray-500 text-sm">Supported formats: ZIP</p>
+            <p className="text-gray-500 text-xs sm:text-sm">
+              Supported formats: ZIP
+            </p>
           </>
         )}
         {submissionStatus && (
-          <p className="text-green-600 text-center mt-4">{submissionStatus}</p>
+          <p className="text-green-600 text-center mt-2 sm:mt-4">
+            {submissionStatus}
+          </p>
         )}
         <input
           id="file-upload"
