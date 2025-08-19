@@ -26,7 +26,9 @@ const ValidatedInputField: React.FC<ValidatedInputFieldProps> = ({
 
   return (
     <div className="flex flex-col w-full mb-4">
-      <label className="mb-1 text-sm font-medium text-gray-700">{label}</label>
+      <label className="mb-1 ml-4 text-sm font-medium text-gray-700">
+        {label}
+      </label>
       <div className="relative">
         <input
           type={type === "password" && showPassword ? "text" : type}
@@ -51,7 +53,7 @@ const ValidatedInputField: React.FC<ValidatedInputFieldProps> = ({
           </button>
         )}
       </div>
-      {error && <p className="mt-1 text-sm text-red-500">{error}</p>}
+      {error && <p className="mt-1 ml-3 text-sm text-red-500">{error}</p>}
     </div>
   );
 };

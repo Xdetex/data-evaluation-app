@@ -1,6 +1,6 @@
 import { Button as HeroUIButton } from "@heroui/react";
 import type { ButtonProps } from "@heroui/react";
-import { ReactNode } from "react";
+import type { ReactNode } from "react";
 
 interface CustomButtonProps extends ButtonProps {
   children: ReactNode;

@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import LoginImg from "/images/login-imge.png";
 import XdetexLogo from "/images/xdetex-logo.png";
-import ValidatedInputField from "../../components/input-field"; // Assuming this is ValidatedInputField.tsx
+import ValidatedInputField from "../../components/input-field";
 import * as yup from "yup";
 import CustomButton from "../../components/custom-button";
 
@@ -24,7 +24,7 @@ function Login() {
     try {
       await schema.validate({ email, password }, { abortEarly: false });
       setErrors({});
-      // Add your login logic here, e.g., API call
+
       console.log("Form submitted:", { email, password });
     } catch (err) {
       if (err instanceof yup.ValidationError) {
@@ -72,7 +72,7 @@ function Login() {
         </form>
         <CustomButton
           className="bg-primary-blue hover:bg-white hover:text-primary-blue text-white hover:border-2 hover:border-primary-blue w-full"
-          onPress={handleSubmit} // Fixed from onPress to onClick
+          onPress={handleSubmit}
         >
           Login
         </CustomButton>
