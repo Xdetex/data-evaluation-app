@@ -68,7 +68,9 @@ const Welcome: React.FC = () => {
       />
       <div className="flex flex-row justify-between">
         <div>
-          <h1 className="text-5xl font-semibold mb-4">Welcome Back</h1>
+          <h1 className="text-5xl font-semibold mb-4 text-primary-blue">
+            Welcome Back
+          </h1>
           <p className="text-gray-600 mb-10 text-sm">
             Yet bed any for travelling assistance indulgence unpleasing.
             <br />
@@ -121,7 +123,7 @@ const Welcome: React.FC = () => {
           </div>
         </div>
       </div>
-      <h2 className="text-xl font-semibold mb-6">Steps</h2>
+      <h2 className="text-xl font-medium mb-6 text-gray-600">Steps</h2>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
         {[...Array(3)].map((_, index) => (
           <div key={index} className="bg-white p-6 rounded-lg shadow-md">
@@ -132,14 +134,16 @@ const Welcome: React.FC = () => {
               Go to "Download your information"
             </h3>
             <ul className="text-gray-600 text-sm list-disc pl-5">
-              <li>Go to Setting & Privacy</li>
+              <li>Go to Setting & Privacy in your Facebook profile</li>
               <li>Search "Download your information"</li>
               <li>Select "Download you information"</li>
             </ul>
           </div>
         ))}
       </div>
-      <h2 className="text-xl font-semibold mb-6">Upload your file here</h2>
+      <h2 className="text-xl font-medium mb-6 text-gray-600">
+        Upload your file here
+      </h2>
       <div
         onDrop={handleDrop}
         onDragOver={handleDragOver}
