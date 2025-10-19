@@ -1,5 +1,3 @@
-import React from "react";
-
 interface StepsCardProps {
   index: number;
   title?: string;
