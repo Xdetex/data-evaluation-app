@@ -10,8 +10,8 @@ const App: React.FC = () => {
     <Router>
       <Routes>
         <Route path="/" element={<MainLogin />} />
-        <Route path="/user-login" element={<Login />} />
-        <Route path="/welcome" element={<WelcomeBack />} />
+        <Route path="/user/login" element={<Login />} />
+        <Route path="/user/welcome" element={<WelcomeBack />} />
       </Routes>
     </Router>
   );

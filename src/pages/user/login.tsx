@@ -17,7 +17,7 @@ const Login: React.FC = () => {
     // Redirect to the submit page (assuming a route like /welcome-back)
     // If using React Router, use navigate('/welcome-back');
     // For simplicity, using window.location
-    window.location.href = "/welcome";
+    window.location.href = "/user/welcome";
   };
 
   return (
@@ -27,7 +27,7 @@ const Login: React.FC = () => {
         alt="XDetex Logo"
         className="w-1/4 sm:w-1/6 md:w-1/8 max-w-full mx-auto mb-4 sm:mb-6 md:mb-15"
       />
-      <div className="bg-white p-8 rounded-2xl shadow-lg w-full max-w-md">
+      <div className="bg-white p-8 rounded-2xl shadow-lg w-full max-w-md border-1 border-gray-50">
         <h2 className="text-2xl font-semibold mb-6 text-center">Sign in</h2>
         <label className="block text-gray-600 text-sm mb-2">Email</label>
         <input

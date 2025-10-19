@@ -1,20 +1,28 @@
 // src/pages/WelcomeBack.tsx
 import React, { useState } from "react";
-import { FaCloudUploadAlt, FaFile } from "react-icons/fa";
+import { FaCloudUploadAlt, FaFile, FaTimes } from "react-icons/fa";
 import XdetexLogo from "/images/xdetex-logo.png";
+import StepsCard from "../../components/steps-card";
 
 const Welcome: React.FC = () => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [submissionStatus, setSubmissionStatus] = useState<string>("");
 
+  const [showVideo, setShowVideo] = useState(false);
+  const [showPdf, setShowPdf] = useState(false);
+
+  // ---- Video & PDF Handling ----
   const handleVideoClick = () => {
-    // Logic to play video, e.g., open a modal or redirect to video URL
-    alert("Playing video guide..."); // Placeholder; replace with actual video playback
+    setShowVideo(true);
   };
 
   const handlePdfClick = () => {
-    // Logic to open PDF, e.g., window.open('/path/to/guide.pdf');
-    alert("Opening PDF guide..."); // Placeholder; replace with actual PDF open
+    setShowPdf(true);
+  };
+
+  const closeModals = () => {
+    setShowVideo(false);
+    setShowPdf(false);
   };
 
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -58,6 +66,34 @@ const Welcome: React.FC = () => {
       alert("Please select a ZIP file to submit.");
     }
   };
+  const stepsData = [
+    {
+      title: "Step 1 – Go to Facebook Data Settings",
+      steps: [
+        "Open Settings & Privacy in your Facebook account.",
+        "Search and open 'Download your information'.",
+        "Choose 'Export your information' option.",
+      ],
+    },
+    {
+      title: "Step 2 – Create and Customize Export",
+      steps: [
+        "Click 'Create Export' and choose your Facebook profile.",
+        "Select 'Export to device'.",
+        "Pick required Custom information categories.",
+        "Set Date Range: Last Year, Format: JSON, Quality: High.",
+        "Start export and confirm with your password.",
+      ],
+    },
+    {
+      title: "Step 3 – Download and Upload Files",
+      steps: [
+        "Wait for the export to be ready and download the ZIP file.",
+        "Extract the ZIP and open the folders.",
+        "Upload only the required JSON files to the website.",
+      ],
+    },
+  ];
 
   return (
     <div className="min-h-screen bg-white p-4 sm:p-6 md:p-10 lg:p-20">
@@ -134,24 +170,14 @@ const Welcome: React.FC = () => {
       <h2 className="text-lg sm:text-xl font-medium mb-4 sm:mb-6 text-gray-600 text-center md:text-left">
         Steps
       </h2>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-6 sm:mb-10">
-        {[...Array(3)].map((_, index) => (
-          <div
+      <div className="grid grid-cols-1 sm:grid-cols-2 sm:justify-center lg:grid-cols-3 gap-4 sm:gap-6 mb-6 sm:mb-10">
+        {stepsData.map((step, index) => (
+          <StepsCard
             key={index}
-            className="bg-white p-4 sm:p-6 rounded-lg shadow-md text-left border-1 border-gray-50"
-          >
-            <div className="bg-gray-100 text-gray-600 font-semibold rounded-full w-8 h-8 flex items-center justify-center mx-auto sm:mx-0 mb-2 sm:mb-4">
-              0{index + 1}
-            </div>
-            <h3 className="text-lg sm:text-2xl font-semibold mb-4 sm:mb-6 p-2 sm:p-5">
-              Go to "Download your information"
-            </h3>
-            <ul className="text-gray-600 text-sm list-disc pl-5">
-              <li>Go to Setting & Privacy in your Facebook profile</li>
-              <li>Search "Download your information"</li>
-              <li>Select "Download you information"</li>
-            </ul>
-          </div>
+            index={index}
+            title={step.title}
+            steps={step.steps}
+          />
         ))}
       </div>
       <h2 className="text-lg sm:text-xl font-medium mb-4 sm:mb-6 text-gray-600 text-center md:text-left">
@@ -214,6 +240,45 @@ const Welcome: React.FC = () => {
           className="hidden"
         />
       </div>
+      {/* --- Video Modal --- */}
+      {showVideo && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+          <div className="bg-white rounded-xl p-4 sm:p-6 md:p-8 w-11/12 sm:w-3/4 md:w-2/3 relative">
+            <button
+              onClick={closeModals}
+              className="absolute top-2 right-2 text-gray-600 hover:text-red-500"
+            >
+              <FaTimes size={15} />
+            </button>
+            <video
+              controls
+              className="w-full rounded-lg shadow-lg"
+              src="/guide/facebook-guide.mp4"
+            >
+              Your browser does not support the video tag.
+            </video>
+          </div>
+        </div>
+      )}
+
+      {/* --- PDF Modal --- */}
+      {showPdf && (
+        <div className="fixed inset-0 bg-black bg-opacity-60 flex justify-center items-center z-50">
+          <div className="bg-white rounded-xl p-4 sm:p-6 md:p-8 w-11/12 sm:w-3/4 md:w-2/3 h-[90vh] relative">
+            <button
+              onClick={closeModals}
+              className="absolute top-2 right-2 text-gray-600 hover:text-red-500"
+            >
+              <FaTimes size={15} />
+            </button>
+            <iframe
+              src="/guide/facebook-guide.pdf"
+              className="w-full h-full rounded-lg"
+              title="PDF Guide"
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 };
