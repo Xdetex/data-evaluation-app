@@ -24,6 +24,7 @@ const Welcome: React.FC = () => {
   const [progressMessage, setProgressMessage] = useState<string>("");
   // track whether user has attempted an upload (so we don't show missing at page load)
   const [hasInteracted, setHasInteracted] = useState<boolean>(false);
+  const [showAllExtras, setShowAllExtras] = useState(false);
 
   //Handle guiding materials
   const [showVideo, setShowVideo] = useState(false);
@@ -425,17 +426,31 @@ const Welcome: React.FC = () => {
               <h4 className="text-yellow-600 font-medium mb-1">
                 Extra or unexpected files ({extraFiles.length})
               </h4>
+
               <ul className="text-sm text-gray-700 list-disc ml-6">
-                {extraFiles.map((x) => (
-                  <li
-                    key={x}
-                    className="truncate max-w-full sm:max-w-[90%] text-sm text-gray-700"
-                    title={x}
-                  >
-                    {x}
-                  </li>
-                ))}
+                {(showAllExtras ? extraFiles : extraFiles.slice(0, 5)).map(
+                  (x) => (
+                    <li
+                      key={x}
+                      className="truncate max-w-full sm:max-w-[90%] text-sm text-gray-700"
+                      title={x}
+                    >
+                      {x}
+                    </li>
+                  )
+                )}
               </ul>
+
+              {extraFiles.length > 5 && (
+                <button
+                  onClick={() => setShowAllExtras(!showAllExtras)}
+                  className="mt-2  hover:text-gray-700 text-primary-blue italic text-xs font-medium transition"
+                >
+                  {showAllExtras
+                    ? "Show less"
+                    : `Show more (${extraFiles.length - 5} more)`}
+                </button>
+              )}
             </div>
           )}
         </div>
