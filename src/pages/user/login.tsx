@@ -28,7 +28,9 @@ const Login: React.FC = () => {
       setErrorMessage("");
 
       const response = await fetch(
-        `${API_BASE_URL}/user/login?email=${encodeURIComponent(email)}`,
+        `${API_BASE_URL}/auth/participant-login?email=${encodeURIComponent(
+          email
+        )}`,
         {
           method: "POST",
           headers: {

@@ -1,208 +1,36 @@
 // src/pages/WelcomeBack.tsx
-import React, { useState } from "react";
-import JSZip from "jszip";
-import { FaCloudUploadAlt, FaFile, FaTimes } from "react-icons/fa";
+import React, { useEffect, useState } from "react";
 import XdetexLogo from "/images/xdetex-logo.png";
+import { FaTimes } from "react-icons/fa";
 import StepsCard from "../../components/steps-card";
-
-const REQUIRED_FILES = [
-  "time_spent_on_facebook.json",
-  "your_comment_active_days.json",
-  "facebook_reels_usage_information.json",
-  "your_notifications_tab_activity.json",
-  "your_facebook_watch_activity_in_the_last_28_days.json",
-];
+import FileUploadSection from "../../components/file-upload-section";
 
 const Welcome: React.FC = () => {
-  // store real File objects for JSON uploads; ZIP will create placeholder Files
-  const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
-  // missing/extra are derived and shown only after user interacts
-  const [missingFiles, setMissingFiles] = useState<string[]>([]);
-  const [extraFiles, setExtraFiles] = useState<string[]>([]);
-  const [statusMessage, setStatusMessage] = useState<string>("");
-  const [loading, setLoading] = useState<boolean>(false);
-  const [progressMessage, setProgressMessage] = useState<string>("");
-  // track whether user has attempted an upload (so we don't show missing at page load)
-  const [hasInteracted, setHasInteracted] = useState<boolean>(false);
-  const [showAllExtras, setShowAllExtras] = useState(false);
-
-  //Handle guiding materials
   const [showVideo, setShowVideo] = useState(false);
   const [showPdf, setShowPdf] = useState(false);
+  const [userEmail, setUserEmail] = useState<string>("");
 
-  // ---- Video & PDF Handling ----
-  const handleVideoClick = () => {
-    setShowVideo(true);
-  };
+  useEffect(() => {
+    // Retrieve user info from localStorage
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      try {
+        const parsedUser = JSON.parse(storedUser);
+        if (parsedUser.email) {
+          setUserEmail(parsedUser.email);
+        }
+      } catch (e) {
+        console.error("Error parsing user data:", e);
+      }
+    }
+  }, []);
 
-  const handlePdfClick = () => {
-    setShowPdf(true);
-  };
-
+  const handleVideoClick = () => setShowVideo(true);
+  const handlePdfClick = () => setShowPdf(true);
   const closeModals = () => {
     setShowVideo(false);
     setShowPdf(false);
   };
-
-  // helper: recompute missing/extra from uploadedFiles' names (uploadedFiles holds File objects)
-  const computeValidationFromUploaded = (fileList: File[]) => {
-    const uploadedNames = fileList.map((f) => f.name);
-    const missing = REQUIRED_FILES.filter((r) => !uploadedNames.includes(r));
-    const extras = uploadedNames.filter((n) => !REQUIRED_FILES.includes(n));
-    return {
-      missing,
-      extras,
-      foundCount: REQUIRED_FILES.length - missing.length,
-    };
-  };
-
-  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = e.target.files;
-    if (!files || files.length === 0) return;
-
-    setHasInteracted(true);
-    setLoading(true);
-    setStatusMessage("");
-    setProgressMessage("");
-    setMissingFiles([]);
-    setExtraFiles([]);
-
-    const allFiles = Array.from(files);
-    // separate zip and json files
-    const zips = allFiles.filter((f) => f.name.toLowerCase().endsWith(".zip"));
-    const jsons = allFiles.filter((f) =>
-      f.name.toLowerCase().endsWith(".json")
-    );
-
-    // process JSON files (multiple at once)
-    if (jsons.length > 0) {
-      // merge newly uploaded JSONs with existing uploadedFiles, avoid duplicates
-      const existingNames = new Set(uploadedFiles.map((f) => f.name));
-      const newJsonFiles = jsons.filter((f) => !existingNames.has(f.name));
-      const merged = [...uploadedFiles, ...newJsonFiles];
-      setUploadedFiles(merged);
-
-      // compute validation from merged
-      const { missing, extras, foundCount } =
-        computeValidationFromUploaded(merged);
-      setMissingFiles(missing);
-      setExtraFiles(extras);
-      setProgressMessage(
-        `${foundCount}/${REQUIRED_FILES.length} files uploaded`
-      );
-
-      if (foundCount === REQUIRED_FILES.length) {
-        setStatusMessage("All required files selected — ready to submit.");
-      } else if (newJsonFiles.length === 0 && jsons.length > 0) {
-        // uploaded files were duplicates
-        setStatusMessage(
-          "Selected files were already uploaded. No new files added."
-        );
-      } else {
-        setStatusMessage(
-          `${foundCount}/${REQUIRED_FILES.length} required files uploaded. Some files are still missing.`
-        );
-      }
-    }
-
-    // process ZIP files (if provided, prefer first zip)
-    if (zips.length > 0) {
-      // If the user supplied both zip and jsons, we still process zip to report its contents
-      const zipFile = zips[0];
-      try {
-        const zip = await JSZip.loadAsync(zipFile);
-        const zipEntries = Object.keys(zip.files).map((p) =>
-          p.replace(/\\/g, "/")
-        );
-        // find required files (by checking end of path)
-        const foundInZip = REQUIRED_FILES.filter((r) =>
-          zipEntries.some((entry) => entry.endsWith(r))
-        );
-        const extrasInZip = zipEntries.filter(
-          (entry) => !REQUIRED_FILES.some((r) => entry.endsWith(r))
-        );
-
-        // For UI, create lightweight File placeholders for files found in zip so they appear in uploaded list
-        const placeholderFiles = foundInZip.map((name) => new File([""], name));
-
-        // Merge placeholders with existing uploadedFiles but avoid duplicates by name
-        const existingNames = new Set(uploadedFiles.map((f) => f.name));
-        const merged = [...uploadedFiles];
-        for (const pf of placeholderFiles) {
-          if (!existingNames.has(pf.name)) merged.push(pf);
-        }
-        setUploadedFiles(merged);
-
-        // compute validation from merged
-        const { missing, extras, foundCount } =
-          computeValidationFromUploaded(merged);
-        // but also reflect zip-specific extras (add to extras list)
-        const combinedExtras = [
-          ...new Set([...extras, ...extrasInZip.map((e) => e)]),
-        ];
-
-        setMissingFiles(missing);
-        setExtraFiles(combinedExtras);
-        setProgressMessage(
-          `${foundCount}/${REQUIRED_FILES.length} files found (including ZIP contents)`
-        );
-
-        if (missing.length === 0) {
-          setStatusMessage(
-            "All required files found inside ZIP — ready to submit."
-          );
-        } else {
-          setStatusMessage(
-            `${foundCount}/${REQUIRED_FILES.length} required files found inside ZIP. Some files are missing.`
-          );
-        }
-      } catch (err) {
-        console.error("ZIP read error:", err);
-        setStatusMessage(
-          "Unable to read ZIP file. Please upload a valid ZIP file."
-        );
-      }
-    }
-
-    setLoading(false);
-    // clear the file input so user can re-select same files if needed
-    // (DOM input clearing would require a ref; alternative: user can re-open)
-  };
-
-  const handleRemoveFile = (filename: string) => {
-    const remaining = uploadedFiles.filter((f) => f.name !== filename);
-    setUploadedFiles(remaining);
-    const { missing, extras, foundCount } =
-      computeValidationFromUploaded(remaining);
-    setMissingFiles(missing);
-    setExtraFiles(extras);
-    setProgressMessage(`${foundCount}/${REQUIRED_FILES.length} files uploaded`);
-    setHasInteracted(true);
-    if (foundCount === REQUIRED_FILES.length) {
-      setStatusMessage("All required files selected — ready to submit.");
-    } else {
-      setStatusMessage(
-        `${foundCount}/${REQUIRED_FILES.length} required files uploaded. Some files are still missing.`
-      );
-    }
-  };
-
-  const handleSubmit = () => {
-    setHasInteracted(true);
-    // final validation
-    const { missing, foundCount } =
-      computeValidationFromUploaded(uploadedFiles);
-    if (missing.length > 0) {
-      setMissingFiles(missing);
-      setStatusMessage(
-        `Cannot submit — ${foundCount}/${REQUIRED_FILES.length} files uploaded. Please upload the missing files.`
-      );
-      return;
-    }
-    setStatusMessage("All required files are ready. Uploading to server...");
-    // TODO: integrate backend upload logic here (FormData with files)
-  };
-
   const stepsData = [
     {
       title: "Step 1 – Go to Facebook Data Settings",
@@ -231,7 +59,6 @@ const Welcome: React.FC = () => {
       ],
     },
   ];
-
   return (
     <div className="min-h-screen bg-white p-4 sm:p-6 md:p-10 lg:p-20">
       <img
@@ -304,11 +131,11 @@ const Welcome: React.FC = () => {
           </div>
         </div>
       </div>
-      {/* Steps to follow */}
+      {/* Steps Section */}
       <h2 className="text-lg sm:text-xl font-medium mb-4 sm:mb-6 text-gray-600 text-center md:text-left">
         Steps
       </h2>
-      <div className="grid grid-cols-1 sm:grid-cols-2 sm:justify-center lg:grid-cols-3 gap-4 sm:gap-6 mb-6 sm:mb-10">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-6 sm:mb-10">
         {stepsData.map((step, index) => (
           <StepsCard
             key={index}
@@ -319,177 +146,13 @@ const Welcome: React.FC = () => {
         ))}
       </div>
 
-      {/* Upload intro */}
-      <div className="text-center mb-6">
-        <h2 className="text-xl font-medium mb-2 text-gray-700">
-          Upload your data files
-        </h2>
-        <p className="text-gray-500 text-sm mb-4">
-          You can upload multiple JSON files at once or upload a ZIP file that
-          contains the required JSON files.
-        </p>
-      </div>
+      {/* File Upload Component */}
+      <FileUploadSection email={userEmail} />
 
-      {/* Clickable drop area */}
-      <label
-        htmlFor="file-input"
-        className="border-2 border-dashed border-gray-300 rounded-2xl p-10 flex flex-col items-center justify-center hover:border-primary-blue transition cursor-pointer text-center"
-        // allow dropping by handling native events on the label (add onDrop/onDragOver if desired)
-      >
-        {loading ? (
-          <div className="flex flex-col items-center space-y-3">
-            <div className="w-8 h-8 border-4 border-primary-blue border-t-transparent rounded-full animate-spin" />
-            <p className="text-gray-500 text-sm">Checking files...</p>
-          </div>
-        ) : (
-          <>
-            <FaCloudUploadAlt className="text-4xl text-primary-blue mb-2" />
-            <p className="text-primary-blue font-medium mb-1">
-              Click here or drag & drop files to upload
-            </p>
-            <p className="text-gray-500 text-xs sm:text-sm mb-1">
-              You may select multiple JSON files at once
-            </p>
-            <p className="text-gray-400 text-xs sm:text-sm">
-              Supported: .json or .zip
-            </p>
-          </>
-        )}
-
-        <input
-          id="file-input"
-          type="file"
-          accept=".json,.zip"
-          multiple
-          onChange={handleFileUpload}
-          className="hidden"
-        />
-      </label>
-
-      {/* Uploaded list (if any) */}
-      {uploadedFiles.length > 0 && (
-        <div className="mt-6 bg-gray-50 rounded-xl p-4 shadow-sm">
-          <h3 className="text-lg font-medium text-gray-700 mb-3">
-            Selected files
-          </h3>
-          <ul>
-            {uploadedFiles.map((f) => (
-              <li
-                key={f.name}
-                className="flex justify-between items-center py-2 border-b border-gray-200"
-              >
-                <div className="flex items-center space-x-2 overflow-hidden">
-                  <FaFile className="text-primary-blue flex-shrink-0" />
-                  <span
-                    className="text-gray-700 text-sm sm:text-base truncate max-w-[180px] sm:max-w-[300px] md:max-w-[400px]"
-                    title={f.name}
-                  >
-                    {f.name}
-                  </span>
-                </div>
-                <button
-                  onClick={() => handleRemoveFile(f.name)}
-                  className="text-red-500 hover:text-red-700 transition"
-                >
-                  Remove
-                </button>
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
-
-      {/* Show missing/extra only after user interaction */}
-      {hasInteracted && (missingFiles.length > 0 || extraFiles.length > 0) && (
-        <div className="mt-6 bg-white rounded-xl p-4 border border-gray-200">
-          {missingFiles.length > 0 && (
-            <div className="mb-3">
-              <h4 className="text-red-600 font-medium mb-1">
-                Missing files ({missingFiles.length})
-              </h4>
-              <ul className="text-sm text-gray-700 list-disc ml-6">
-                {missingFiles.map((m) => (
-                  <li
-                    key={m}
-                    className="truncate max-w-full sm:max-w-[90%] text-sm text-gray-700"
-                    title={m}
-                  >
-                    {m}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
-
-          {extraFiles.length > 0 && (
-            <div>
-              <h4 className="text-yellow-600 font-medium mb-1">
-                Extra or unexpected files ({extraFiles.length})
-              </h4>
-
-              <ul className="text-sm text-gray-700 list-disc ml-6">
-                {(showAllExtras ? extraFiles : extraFiles.slice(0, 5)).map(
-                  (x) => (
-                    <li
-                      key={x}
-                      className="truncate max-w-full sm:max-w-[90%] text-sm text-gray-700"
-                      title={x}
-                    >
-                      {x}
-                    </li>
-                  )
-                )}
-              </ul>
-
-              {extraFiles.length > 5 && (
-                <button
-                  onClick={() => setShowAllExtras(!showAllExtras)}
-                  className="mt-2  hover:text-gray-700 text-primary-blue italic text-xs font-medium transition"
-                >
-                  {showAllExtras
-                    ? "Show less"
-                    : `Show more (${extraFiles.length - 5} more)`}
-                </button>
-              )}
-            </div>
-          )}
-        </div>
-      )}
-
-      {/* Progress & status */}
-      {(progressMessage || statusMessage) && (
-        <div className="mt-4 text-center">
-          {progressMessage && (
-            <p className="text-sm text-gray-600">{progressMessage}</p>
-          )}
-          {statusMessage && (
-            <p
-              className={`mt-2 font-medium ${
-                statusMessage.toLowerCase().includes("missing")
-                  ? "text-red-600"
-                  : "text-gray-700"
-              }`}
-            >
-              {statusMessage}
-            </p>
-          )}
-        </div>
-      )}
-
-      {/* Submit */}
-      <div className="flex justify-center mt-6">
-        <button
-          onClick={handleSubmit}
-          disabled={loading}
-          className="py-3 px-8 bg-primary-blue text-white rounded-full font-medium hover:bg-white hover:text-primary-blue hover:border-2 transition disabled:opacity-60"
-        >
-          Submit Files
-        </button>
-      </div>
       {/* --- Video Modal --- */}
       {showVideo && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-          <div className="bg-white rounded-xl p-4 sm:p-6 md:p-8 w-11/12 sm:w-3/4 md:w-2/3 relative">
+          <div className="bg-white rounded-xl p-6 w-11/12 sm:w-3/4 md:w-2/3 relative">
             <button
               onClick={closeModals}
               className="absolute top-2 right-2 text-gray-600 hover:text-red-500"
@@ -510,7 +173,7 @@ const Welcome: React.FC = () => {
       {/* --- PDF Modal --- */}
       {showPdf && (
         <div className="fixed inset-0 bg-black bg-opacity-60 flex justify-center items-center z-50">
-          <div className="bg-white rounded-xl p-4 sm:p-6 md:p-8 w-11/12 sm:w-3/4 md:w-2/3 h-[90vh] relative">
+          <div className="bg-white rounded-xl p-6 w-11/12 sm:w-3/4 md:w-2/3 h-[90vh] relative">
             <button
               onClick={closeModals}
               className="absolute top-2 right-2 text-gray-600 hover:text-red-500"
