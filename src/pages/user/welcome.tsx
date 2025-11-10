@@ -93,7 +93,7 @@ const Welcome: React.FC = () => {
                     "noopener,noreferrer"
                   )
                 }
-                className="bg-gray-100 text-gray-700 rounded-full p-2 sm:p-3 md:p-4 flex items-center justify-center hover:bg-gray-300 transition"
+                className="bg-gray-100 cursor-pointer text-gray-700 rounded-full p-2 sm:p-3 md:p-4 flex items-center justify-center hover:bg-gray-300 transition"
               >
                 <svg
                   width="24"
@@ -117,7 +117,7 @@ const Welcome: React.FC = () => {
             </div>
 
             {/* --- PDF Button --- */}
-            <div className="shiny-border p-[2px] rounded-full">
+            <div className="shiny-border p-[2px] rounded-full ">
               <button
                 onClick={() =>
                   window.open(
@@ -126,7 +126,7 @@ const Welcome: React.FC = () => {
                     "noopener,noreferrer"
                   )
                 }
-                className="bg-gray-100 text-gray-700 rounded-full p-2 sm:p-3 md:p-4 flex items-center justify-center hover:bg-gray-300 transition"
+                className="bg-gray-100 cursor-pointer text-gray-700 rounded-full p-2 sm:p-3 md:p-4 flex items-center justify-center hover:bg-gray-300 transition"
               >
                 <svg
                   width="24"
