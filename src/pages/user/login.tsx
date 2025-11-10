@@ -1,6 +1,6 @@
 // src/pages/Login.tsx
 import React, { useEffect, useState } from "react";
-import XdetexLogo from "/images/xdetex-logo.png";
+import XdetexLogo from "/images/xdetex-logo.jpeg";
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState<string>("");

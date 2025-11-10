@@ -1,7 +1,7 @@
 // src/pages/common/login.tsx
 import { useState } from "react";
-import LoginImg from "/images/login-imge.png";
-import XdetexLogo from "/images/xdetex-logo.png";
+import LoginImg from "../../../public/images/login-img.jpeg";
+import XdetexLogo from "../../../public/images/xdetex-logo.jpeg";
 import ValidatedInputField from "../../components/input-field";
 import * as yup from "yup";
 import CustomButton from "../../components/custom-button";

@@ -1,6 +1,6 @@
 // src/pages/WelcomeBack.tsx
 import React, { useEffect, useState } from "react";
-import XdetexLogo from "/images/xdetex-logo.png";
+import XdetexLogo from "../../../public/images/xdetex-logo.jpeg";
 import { FaTimes } from "react-icons/fa";
 import StepsCard from "../../components/steps-card";
 import FileUploadSection from "../../components/file-upload-section";
@@ -25,12 +25,6 @@ const Welcome: React.FC = () => {
     }
   }, []);
 
-  const handleVideoClick = () => setShowVideo(true);
-  const handlePdfClick = () => setShowPdf(true);
-  const closeModals = () => {
-    setShowVideo(false);
-    setShowPdf(false);
-  };
   const stepsData = [
     {
       title: "Step 1 – Go to Facebook Data Settings",
@@ -46,7 +40,7 @@ const Welcome: React.FC = () => {
         "Click 'Create Export' and choose your Facebook profile.",
         "Select 'Export to device'.",
         "Pick required Custom information categories.",
-        "Set Date Range: Last Year, Format: JSON, Quality: High.",
+        "Set Date Range: <b class='text-primary-blue'>Last Year</b>, Format: <b class='text-green-600'>JSON</b>, Quality: <b class='text-orange-500'>High</b>.",
         "Start export and confirm with your password.",
       ],
     },
@@ -59,6 +53,7 @@ const Welcome: React.FC = () => {
       ],
     },
   ];
+
   return (
     <div className="min-h-screen bg-white p-4 sm:p-6 md:p-10 lg:p-20">
       <img
@@ -68,20 +63,39 @@ const Welcome: React.FC = () => {
       />
       <div className="flex flex-col md:flex-row justify-between items-center md:items-start">
         <div className="text-center md:text-left">
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-semibold mb-2 text-primary-blue">
-            Welcome Back
-          </h1>
-          <p className="text-gray-600 mb-4 sm:mb-6 md:mb-10 text-sm">
-            Yet bed any for travelling assistance indulgence unpleasing.
-            <br />
-            Not thoughts all exercise blessing.
+          <div className="p-2">
+            <span className="text-base sm:text-md font-medium mb-2 text-primary-blue">
+              Hello,{" "}
+            </span>
+            <span className="text-base sm:text-md font-medium mb-2 text-black">
+              {userEmail}
+            </span>
+          </div>
+          <p className="text-3xl sm:text-4xl md:text-5xl font-semibold mb-2 text-primary-blue">
+            Welcome to the{" "}
+          </p>
+          <span className="font-medium text-lg text-primary-blue">
+            XDetex Portal
+          </span>{" "}
+          <p className="text-gray-600 mb-4 md:justify-center w-full sm:mb-6 md:mb-10 text-sm sm:text-base leading-relaxed md:w-[70%]">
+            Here you can securely upload your Facebook data files for analysis.
+            Please make sure all required JSON files are included before
+            submission. Once uploaded, your data will be processed and verified
+            automatically.
           </p>
         </div>
+
         <div className="flex flex-col items-center justify-center gap-2 sm:gap-3 mt-4 md:mt-0">
           <span className="font-Poppins text-sm sm:text-base">Guide</span>
           <div className="flex mb-5 sm:mb-4 md:mb-10 space-x-2 sm:space-x-4">
             <button
-              onClick={handleVideoClick}
+              onClick={() =>
+                window.open(
+                  "https://youtu.be/18G72j1I2sw",
+                  "_blank",
+                  "noopener,noreferrer"
+                )
+              }
               className="bg-gray-200 text-gray-700 rounded-full p-2 sm:p-3 md:p-4 flex items-center justify-center hover:bg-gray-300 transition"
             >
               <svg
@@ -108,7 +122,13 @@ const Welcome: React.FC = () => {
               </svg>
             </button>
             <button
-              onClick={handlePdfClick}
+              onClick={() =>
+                window.open(
+                  "https://drive.google.com/file/d/1TgSXiVl1FoDiWVgf-92XCRqrVDjE7yiS/view?usp=sharing",
+                  "_blank",
+                  "noopener,noreferrer"
+                )
+              }
               className="bg-gray-200 text-gray-700 rounded-full p-2 sm:p-3 md:p-4 flex items-center justify-center hover:bg-gray-300 transition"
             >
               <svg
@@ -148,46 +168,6 @@ const Welcome: React.FC = () => {
 
       {/* File Upload Component */}
       <FileUploadSection email={userEmail} />
-
-      {/* --- Video Modal --- */}
-      {showVideo && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-          <div className="bg-white rounded-xl p-6 w-11/12 sm:w-3/4 md:w-2/3 relative">
-            <button
-              onClick={closeModals}
-              className="absolute top-2 right-2 text-gray-600 hover:text-red-500"
-            >
-              <FaTimes size={15} />
-            </button>
-            <video
-              controls
-              className="w-full rounded-lg shadow-lg"
-              src="/guide/facebook-guide.mp4"
-            >
-              Your browser does not support the video tag.
-            </video>
-          </div>
-        </div>
-      )}
-
-      {/* --- PDF Modal --- */}
-      {showPdf && (
-        <div className="fixed inset-0 bg-black bg-opacity-60 flex justify-center items-center z-50">
-          <div className="bg-white rounded-xl p-6 w-11/12 sm:w-3/4 md:w-2/3 h-[90vh] relative">
-            <button
-              onClick={closeModals}
-              className="absolute top-2 right-2 text-gray-600 hover:text-red-500"
-            >
-              <FaTimes size={15} />
-            </button>
-            <iframe
-              src="/guide/facebook-guide.pdf"
-              className="w-full h-full rounded-lg"
-              title="PDF Guide"
-            />
-          </div>
-        </div>
-      )}
     </div>
   );
 };

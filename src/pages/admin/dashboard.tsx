@@ -9,7 +9,7 @@ import {
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ConfirmDialog from "../../components/confirm-dialog";
-import XdetexLogo from "../../../public/images/xdetex-logo.png";
+import XdetexLogo from "../../../public/images/xdetex-logo.jpeg";
 
 type Participant = {
   id: number;
