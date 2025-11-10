@@ -231,7 +231,7 @@ const FileUploadSection: React.FC<FileUploadSectionProps> = ({ email }) => {
       if (!response.ok) throw new Error("Upload failed");
       const data = await response.json();
       console.log("Upload result:", data);
-      setStatusMessage(" Upload successful!");
+      setStatusMessage(" Upload Successful!");
     } catch (err) {
       console.error("Upload error:", err);
       setStatusMessage(" Upload failed. Please try again.");

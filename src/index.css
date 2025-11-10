@@ -27,4 +27,36 @@ body {
 }
 
 
-/* Additional CSS rules can go here if needed */
+/* === Animated rotating shine border === */
+
+.shiny-border {
+    position: relative;
+    border-radius: 9999px;
+    /* fully rounded */
+    overflow: hidden;
+    z-index: 0;
+}
+
+.shiny-border::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 9999px;
+    padding: 2px;
+    /* thickness of the shiny border */
+    background: conic-gradient( from 0deg, #00b4d8, #90e0ef, #0077b6, #00b4d8);
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask-composite: exclude;
+    -webkit-mask-composite: destination-out;
+    animation: rotate-shine 2.5s linear infinite;
+    z-index: -1;
+}
+
+
+/* rotate the conic gradient */
+
+@keyframes rotate-shine {
+    to {
+        transform: rotate(360deg);
+    }
+}
