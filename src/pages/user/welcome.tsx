@@ -1,13 +1,10 @@
 // src/pages/WelcomeBack.tsx
 import React, { useEffect, useState } from "react";
 import XdetexLogo from "../../../public/images/xdetex-logo.jpeg";
-import { FaTimes } from "react-icons/fa";
 import StepsCard from "../../components/steps-card";
 import FileUploadSection from "../../components/file-upload-section";
 
 const Welcome: React.FC = () => {
-  const [showVideo, setShowVideo] = useState(false);
-  const [showPdf, setShowPdf] = useState(false);
   const [userEmail, setUserEmail] = useState<string>("");
 
   useEffect(() => {
