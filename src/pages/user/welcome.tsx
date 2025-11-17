@@ -53,7 +53,7 @@ const Welcome: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-white p-4 sm:px-6 md:px-10 lg:px-20">
-      <span className="text-sm flex flex-row justify-end w-full sm:text-md font-light text-black mt-5 italic">
+      <span className="text-sm flex flex-row justify-center sm:justify-end w-full sm:text-md font-light text-black mt-5 italic">
         {userEmail}
       </span>
       <img
@@ -145,7 +145,6 @@ const Welcome: React.FC = () => {
           </div>
         </div>
       </div>
-      {/* Steps Section */}
       <h2 className="text-lg sm:text-xl font-medium mb-4 sm:mb-6 text-gray-600 text-center md:text-left">
         Steps
       </h2>
@@ -159,6 +158,39 @@ const Welcome: React.FC = () => {
           />
         ))}
       </div>
+      {/* ===================== REQUIRED FILES SECTION ===================== */}
+      <div className="mt-10 mb-10">
+        <h2 className="text-xl sm:text-2xl font-semibold mb-4 text-primary-blue">
+          Required Files for Upload
+        </h2>
+
+        <p className="text-gray-700 text-sm sm:text-base mb-4 leading-relaxed">
+          You have two options to upload your data:
+        </p>
+
+        <ul className="list-disc ml-6 text-gray-700 text-sm sm:text-base mb-4">
+          <li>
+            <b>Option 1:</b> Upload the entire Facebook ZIP file — the system
+            will automatically extract and select the required files.
+          </li>
+          <li>
+            <b>Option 2:</b> Upload the required JSON files individually (listed
+            below).
+          </li>
+        </ul>
+
+        {/* === Required Files Code Block === */}
+        <div className="bg-gray-100 text-gray-900 p-4 sm:p-6 rounded-lg overflow-x-auto text-sm sm:text-base">
+          <pre className="whitespace-pre-wrap font-mono">
+            {`Your_facebook_activity/other_activity/time_spent_on_facebook.json
+Your_facebook_activity/comments_and_reactions/your_comment_active_days.json
+Logged_information/other_logged_information/facebook_reels_usage_information.json
+Logged_information/notifications/your_notifications_tab_activity.json
+Logged_information/other_logged_information/your_facebook_watch_activity_in_the_last_28_days.json`}
+          </pre>
+        </div>
+      </div>
+      {/* Steps Section */}
 
       {/* File Upload Component */}
       <FileUploadSection email={userEmail} />
