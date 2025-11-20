@@ -17,7 +17,7 @@ function StepsCard({
     <div>
       <div
         key={index}
-        className="bg-white p-5 sm:p-6 rounded-lg shadow-md text-left border-1 border-gray-50 sm:h-fit md:h-110 h-90"
+        className="bg-white p-5 sm:p-6 rounded-lg shadow-md text-left border-1 border-gray-50 sm:h-full md:h-155 xl:h-140 h-130"
       >
         <div className="bg-gray-100 text-gray-600 font-semibold rounded-full w-8 h-8 flex items-center justify-center mx-auto sm:mx-0 mb-2 sm:mb-4">
           0{index + 1}

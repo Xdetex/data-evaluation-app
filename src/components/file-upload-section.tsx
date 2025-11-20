@@ -26,6 +26,7 @@ const FileUploadSection: React.FC<FileUploadSectionProps> = ({ email }) => {
   const [showAllExtras, setShowAllExtras] = useState(false);
   const [alreadyUploaded, setAlreadyUploaded] = useState<boolean>(false);
   const [lastUploadDate, setLastUploadDate] = useState<string | null>(null);
+  const [uploadSuccess, setUploadSuccess] = useState<boolean>(false);
 
   // Check if user has uploaded before
   useEffect(() => {
@@ -232,6 +233,7 @@ const FileUploadSection: React.FC<FileUploadSectionProps> = ({ email }) => {
       const data = await response.json();
       console.log("Upload result:", data);
       setStatusMessage(" Upload Successful!");
+      setUploadSuccess(true);
     } catch (err) {
       console.error("Upload error:", err);
       setStatusMessage(" Upload failed. Please try again.");
@@ -276,13 +278,28 @@ const FileUploadSection: React.FC<FileUploadSectionProps> = ({ email }) => {
           {/* Upload Input */}
           <label
             htmlFor="file-input"
-            className="border-2 border-dashed border-gray-300 rounded-2xl p-10 flex flex-col items-center justify-center hover:border-primary-blue transition cursor-pointer text-center"
+            className={`border-2 border-dashed rounded-2xl p-10 flex flex-col items-center justify-center transition text-center cursor-pointer
+    ${
+      uploadSuccess
+        ? "border-gray-300 bg-gray-100 cursor-not-allowed opacity-60"
+        : "border-gray-300 hover:border-primary-blue"
+    }
+  `}
+            onClick={(e) => uploadSuccess && e.preventDefault()} // Disable click
           >
             {loading ? (
               <div className="flex flex-col items-center space-y-3">
                 <div className="w-8 h-8 border-4 border-primary-blue border-t-transparent rounded-full animate-spin" />
                 <p className="text-gray-500 text-sm">Checking files...</p>
               </div>
+            ) : uploadSuccess ? (
+              <>
+                <FaCloudUploadAlt className="text-4xl text-gray-400 mb-2" />
+                <p className="text-gray-500 font-medium">
+                  Files uploaded successfully
+                </p>
+                <p className="text-gray-400 text-xs">Upload disabled</p>
+              </>
             ) : (
               <>
                 <FaCloudUploadAlt className="text-4xl text-primary-blue mb-2" />
@@ -304,6 +321,7 @@ const FileUploadSection: React.FC<FileUploadSectionProps> = ({ email }) => {
               multiple
               onChange={handleFileUpload}
               className="hidden"
+              disabled={uploadSuccess} // Disable input
             />
           </label>
 
@@ -408,10 +426,15 @@ const FileUploadSection: React.FC<FileUploadSectionProps> = ({ email }) => {
           <div className="flex justify-center mt-6">
             <button
               onClick={handleSubmit}
-              disabled={loading}
-              className="py-3 px-8 bg-primary-blue text-white rounded-full font-medium hover:bg-white hover:text-primary-blue hover:border-2 transition disabled:opacity-60"
+              disabled={loading || uploadSuccess}
+              className={`py-3 px-8 rounded-full font-medium transition disabled:opacity-60 
+              ${
+                uploadSuccess
+                  ? "bg-gray-400 cursor-not-allowed"
+                  : "bg-primary-blue text-white hover:bg-white hover:text-primary-blue hover:border-2"
+              }`}
             >
-              Submit Files
+              {uploadSuccess ? "Files Submitted" : "Submit Files"}
             </button>
           </div>
         </>

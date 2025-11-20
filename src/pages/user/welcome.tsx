@@ -38,11 +38,27 @@ const Welcome: React.FC = () => {
       steps: [
         "Click 'Create Export' and choose your Facebook profile.",
         "Select 'Export to device'.",
-        "Pick required Custom information categories.",
+        `
+    Pick bellow Custom information categories:
+    <div class='mt-2 ml-3 text-gray-700'>
+      <b>1. Your Facebook Activity</b>
+      <ul class='list-disc ml-5'>
+        <li>Comments and Reactions</li>
+        <li>Other Activity</li>
+      </ul>
+
+      <b class='mt-2 block'>2. Logged Information</b>
+      <ul class='list-disc ml-5'>
+        <li>Notifications</li>
+        <li>Other Logged Information</li>
+      </ul>
+    </div>
+    `,
         "Set Date Range: <b class='text-primary-blue'>Last Year</b>, Format: <b class='text-green-600'>JSON</b>, Quality: <b class='text-orange-500'>High</b>.",
         "Start export and confirm with your password.",
       ],
     },
+
     {
       title: "Step 3 – Download and Upload Files",
       steps: [
