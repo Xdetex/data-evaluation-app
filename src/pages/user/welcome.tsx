@@ -6,6 +6,8 @@ import FileUploadSection from "../../components/file-upload-section";
 
 const Welcome: React.FC = () => {
   const [userEmail, setUserEmail] = useState<string>("");
+  const GUIDE_VIDEO_URL = import.meta.env.VITE_GUIDE_VIDEO_URL;
+  const GUIDE_PDF_URL = import.meta.env.VITE_GUIDE_PDF_URL;
 
   useEffect(() => {
     // Retrieve user info from localStorage
@@ -87,11 +89,7 @@ const Welcome: React.FC = () => {
             <div className="shiny-border p-[2px] rounded-full">
               <button
                 onClick={() =>
-                  window.open(
-                    "https://youtu.be/18G72j1I2sw",
-                    "_blank",
-                    "noopener,noreferrer"
-                  )
+                  window.open(GUIDE_VIDEO_URL, "_blank", "noopener,noreferrer")
                 }
                 className="bg-gray-100 cursor-pointer text-gray-700 rounded-full p-2 sm:p-3 md:p-4 flex items-center justify-center hover:bg-gray-300 transition"
               >
@@ -120,11 +118,7 @@ const Welcome: React.FC = () => {
             <div className="shiny-border p-[2px] rounded-full ">
               <button
                 onClick={() =>
-                  window.open(
-                    "https://drive.google.com/file/d/1TgSXiVl1FoDiWVgf-92XCRqrVDjE7yiS/view?usp=sharing",
-                    "_blank",
-                    "noopener,noreferrer"
-                  )
+                  window.open(GUIDE_PDF_URL, "_blank", "noopener,noreferrer")
                 }
                 className="bg-gray-100 cursor-pointer text-gray-700 rounded-full p-2 sm:p-3 md:p-4 flex items-center justify-center hover:bg-gray-300 transition"
               >
