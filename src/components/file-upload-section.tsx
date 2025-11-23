@@ -253,7 +253,12 @@ const FileUploadSection: React.FC<FileUploadSectionProps> = ({ email }) => {
           <p className="text-gray-600 text-sm mb-3">
             Uploaded on:{" "}
             <span className="font-semibold text-primary-blue">
-              {new Date(lastUploadDate || "").toLocaleString()}
+              {new Date(lastUploadDate || "").toLocaleDateString("en-US", {
+                timeZone: "Asia/Colombo",
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+              })}
             </span>
           </p>
           <p className="text-gray-500 text-sm">
@@ -321,7 +326,7 @@ const FileUploadSection: React.FC<FileUploadSectionProps> = ({ email }) => {
               multiple
               onChange={handleFileUpload}
               className="hidden"
-              disabled={uploadSuccess} // Disable input
+              disabled={uploadSuccess}
             />
           </label>
 
